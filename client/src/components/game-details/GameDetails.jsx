@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 
 import * as gameService from "../../services/gameServices"
+import * as commentService from "../../services/commentService"
 
 
 export default function GamesDetails () {
@@ -13,6 +14,20 @@ export default function GamesDetails () {
         gameService.getOne(gameId)
             .then(setGame)
     },[gameId])
+
+    const addCommentHandler = async (e) => {
+
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+        const newComment = await commentService.create(
+            gameId,
+            formData.get('username'),
+            formData.get('comment'),
+          )
+
+          console.log(newComment);
+    }
 
     return (
         <section id="game-details">
@@ -31,20 +46,20 @@ export default function GamesDetails () {
                 </p>
 
                 {/* <!-- Bonus ( htmlFor Guests and Users ) --> */}
-                {/* <div className="details-comments">
+                <div className="details-comments">
                     <h2>Comments:</h2>
-                    <ul> */}
+                    <ul>
                         {/* <!-- list all comments htmlFor current game (If any) --> */}
-                        {/* <li className="comment">
+                        <li className="comment">
                             <p>Content: I rate this one quite highly.</p>
                         </li>
                         <li className="comment">
                             <p>Content: The best game.</p>
                         </li>
-                    </ul> */}
+                    </ul>
                     {/* <!-- Display paragraph: If there are no games in the database --> */}
                     <p className="no-comment">No comments.</p>
-                {/* </div> */}
+                </div>
 
                 {/* <!-- Edit/Delete buttons ( Only htmlFor creator of this game )  --> */}
                 {/* <div className="buttons">
@@ -55,13 +70,14 @@ export default function GamesDetails () {
 
             {/* <!-- Bonus --> */}
             {/* <!-- Add Comment ( Only htmlFor logged-in users, which is not creators of the current game ) --> */}
-             {/* <article className="create-comment">
+             <article className="create-comment">
                  <label>Add new comment:</label>
-                 <htmlForm className="htmlForm">
+                 <form className="form" onSubmit={addCommentHandler}>
+                    <input type="text" name="username" placeholder="username" />
                      <textarea name="comment" placeholder="Comment......"></textarea>
                      <input className="btn submit" type="submit" value="Add Comment" />
-                 </htmlForm>
-             </article> */}
+                 </form>
+             </article>
 
         </section>
     )
