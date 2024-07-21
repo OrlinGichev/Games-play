@@ -1,10 +1,24 @@
+import { useNavigate  } from "react-router-dom";
+
+import * as gameService from "../../services/gameServices";
+
 export default function GameCreate () {
 
-    const createGameSubmitHandler = (e) => {
+const navigate = useNavigate();
+
+    const createGameSubmitHandler = async (e) => {
         e.preventDefault()
 
         const gameData = Object.fromEntries(new FormData(e.currentTarget));
-        console.log(gameData);
+
+        try {
+            await gameService.create(gameData);
+            navigate('/games');
+            
+        } catch (error) {
+            console.error(error);
+        }
+
     }
     return (
         <section id="create-page" className="auth">
