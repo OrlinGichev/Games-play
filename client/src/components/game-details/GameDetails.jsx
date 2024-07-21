@@ -8,11 +8,15 @@ import * as commentService from "../../services/commentService"
 export default function GamesDetails () {
 
     const [game, setGame] = useState({});
+    const [comments, setComments] = useState([]);
     const { gameId } =useParams();
 
     useEffect(() => {
         gameService.getOne(gameId)
-            .then(setGame)
+            .then(setGame);
+
+        commentService.getAll()
+            .then(setComments);
     },[gameId])
 
     const addCommentHandler = async (e) => {
@@ -50,15 +54,16 @@ export default function GamesDetails () {
                     <h2>Comments:</h2>
                     <ul>
                         {/* <!-- list all comments htmlFor current game (If any) --> */}
-                        <li className="comment">
-                            <p>Content: I rate this one quite highly.</p>
-                        </li>
-                        <li className="comment">
-                            <p>Content: The best game.</p>
-                        </li>
+                        {comments.map(({username, text}) => (
+                            <li className="comment">
+                                <p>{username}: {text}</p>
+                            </li>
+                        ))}
+                       
                     </ul>
                     {/* <!-- Display paragraph: If there are no games in the database --> */}
-                    <p className="no-comment">No comments.</p>
+                    { comments.length === 0 && (<p className="no-comment">No comments.</p> )}
+                    
                 </div>
 
                 {/* <!-- Edit/Delete buttons ( Only htmlFor creator of this game )  --> */}
