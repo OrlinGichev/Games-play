@@ -1,20 +1,33 @@
-import { Routes, Route } from "react-router-dom"
-import { useState } from "react"
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-import Header from "./components/header/header"
-import Home from "./components/home/home"
-import GameList from "./components/game-list/GameList"
-import Login from "./components/login/Login"
-import Register from "./components/register/Register"
-import GameCreate from "./components/game-create/GameCreate"
-import GamesDetails from "./components/game-details/GameDetails"
-import AuthContext from "./contexts/authContext"
+import * as authService from "./services/authService";
+import AuthContext from "./contexts/authContext";
+import Path from "./paths";
+
+import Header from "./components/header/header";
+import Home from "./components/home/home";
+import GameList from "./components/game-list/GameList";
+import Login from "./components/login/Login";
+import Register from "./components/register/Register";
+import GameCreate from "./components/game-create/GameCreate";
+import GamesDetails from "./components/game-details/GameDetails";
 
 function App() {
   const [auth, setAuth] = useState({});
+  const navigate = useNavigate();
 
-  const loginSubmitHandler = (values) =>{
-    console.log(values);
+  // accessToken,
+  // email,
+  // username,
+  // _id
+
+  const loginSubmitHandler = async values =>{
+
+    const result = await authService.login(values.email, values.password);
+
+    setAuth(result);
+    navigate(Path.Home);
   }
 
   return (
