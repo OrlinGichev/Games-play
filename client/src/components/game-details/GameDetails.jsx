@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 
 import * as gameService from "../../services/gameServices"
 import * as commentService from "../../services/commentService"
+import AuthContext from "../../contexts/authContext";
 
 
 export default function GamesDetails () {
+
+    const {email} = useContext(AuthContext);
 
     const [game, setGame] = useState({});
     const [comments, setComments] = useState([]);
@@ -24,13 +27,13 @@ export default function GamesDetails () {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
+
         const newComment = await commentService.create(
             gameId,
-            formData.get('username'),
             formData.get('comment'),
           )
 
-          setComments(state => [...state,newComment]);
+          setComments(state => [...state,{...newComment, author: {email}}]);
      
     }
 
@@ -50,19 +53,16 @@ export default function GamesDetails () {
                    {game.summary}
                 </p>
 
-                {/* <!-- Bonus ( htmlFor Guests and Users ) --> */}
                 <div className="details-comments">
                     <h2>Comments:</h2>
-                    <ul>
-                        {/* <!-- list all comments htmlFor current game (If any) --> */}
-                        {comments.map(({_id,username, text}) => (
+                    <ul>                       
+                        {comments.map(({_id, text, owner}) => (
                             <li key={_id} className="comment">
-                                <p>{username}: {text}</p>
+                                <p>{owner?.email}: {text}</p>
                             </li>
                         ))}
                        
                     </ul>
-                    {/* <!-- Display paragraph: If there are no games in the database --> */}
                     { comments.length === 0 && (<p className="no-comment">No comments.</p> )}
                     
                 </div>
@@ -79,7 +79,6 @@ export default function GamesDetails () {
              <article className="create-comment">
                  <label>Add new comment:</label>
                  <form className="form" onSubmit={addCommentHandler}>
-                    <input type="text" name="username" placeholder="username" />
                      <textarea name="comment" placeholder="Comment......"></textarea>
                      <input className="btn submit" type="submit" value="Add Comment" />
                  </form>
