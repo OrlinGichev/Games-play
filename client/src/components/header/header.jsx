@@ -5,8 +5,8 @@ import AuthContext from "../../contexts/authContext";
 export default function Header() {
 
     const {
-        isAthenticated,
-        username,
+        isAuthenticated,
+        email,
     } = useContext(AuthContext)
 
     return (
@@ -16,15 +16,15 @@ export default function Header() {
         <nav>
             <Link to="/games">All games</Link>
             {/* <!-- Logged-in users --> */}
-            {isAthenticated && (
+            {isAuthenticated && (
                 <div id="user">
                     <Link to="/game-create">Create Game</Link>
-                    <Link to="/loguot">Logout</Link>
-                    <span>| {username}</span>
+                    <Link to="/logout">Logout</Link>
+                    <span>| {email}</span>
                 </div>
             )}
             {/* <!-- Guest users --> */}
-            {!isAthenticated && (
+            {!isAuthenticated && (
                 <div id="guest">
                     <Link to="/login">Login</Link>
                     <Link to="/register">Register</Link>

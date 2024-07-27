@@ -12,6 +12,7 @@ import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import GameCreate from "./components/game-create/GameCreate";
 import GamesDetails from "./components/game-details/GameDetails";
+import Logout from "./components/logout/Logout";
 
 function App() {
   const [auth, setAuth] = useState({});
@@ -27,19 +28,35 @@ function App() {
     const result = await authService.login(values.email, values.password);
 
     setAuth(result);
+
+    localStorage.setItem('accessToken', result.accessToken);
+
     navigate(Path.Home);
   };
 
   const registerSubmitHandler = async (values) =>{
     const result = await authService.register(values.email, values.password);
+
     setAuth(result);
+
+    localStorage.setItem('accessToken', result.accessToken);
+
     navigate(Path.Home);
-    console.log(result);
+
   }
+
+  const logoutHandler = () => {
+    setAuth({});
+    localStorage.removeItem('accessToken');
+
+    navigate(Path.Home);
+
+  };
 
   const values = {
     loginSubmitHandler,
     registerSubmitHandler,
+    logoutHandler,
     username: auth.username || auth.email,
     email: auth.email,
     isAuthenticated: !!auth.email,
@@ -56,6 +73,7 @@ function App() {
                   <Route path="/register" element={<Register />} /> 
                   <Route path="/game-create" element={<GameCreate />} />
                   <Route path="/games/:gameId" element={<GamesDetails />} />
+                  <Route path={Path.Logout} element={<Logout />} />
               </Routes>
         </div>
     </AuthContext.Provider>
