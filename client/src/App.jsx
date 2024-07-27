@@ -15,7 +15,10 @@ import GamesDetails from "./components/game-details/GameDetails";
 import Logout from "./components/logout/Logout";
 
 function App() {
-  const [auth, setAuth] = useState({});
+  const [auth, setAuth] = useState(() => {
+    localStorage.removeItem('accessToken');
+    return {};
+  });
   const navigate = useNavigate();
 
   // accessToken,
@@ -48,8 +51,6 @@ function App() {
   const logoutHandler = () => {
     setAuth({});
     localStorage.removeItem('accessToken');
-
-    navigate(Path.Home);
 
   };
 
