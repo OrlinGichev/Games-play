@@ -28,14 +28,21 @@ function App() {
 
     setAuth(result);
     navigate(Path.Home);
+  };
+
+  const values = {
+    loginSubmitHandler,
+    username: auth.username,
+    email: auth.email,
+    isAuthenticated: !!auth.username,
   }
 
   return (
-    <AuthContext.Provider value={{loginSubmitHandler}}>
+    <AuthContext.Provider value={values}>
         <div id="box">
           <Header />
               <Routes>
-                  <Route path="/" element={<Home />} />     
+                  <Route path={Path.Home} element={<Home />} />     
                   <Route path="/games" element={<GameList />} /> 
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} /> 
