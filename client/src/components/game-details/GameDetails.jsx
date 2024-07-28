@@ -5,25 +5,15 @@ import * as gameService from "../../services/gameServices"
 import * as commentService from "../../services/commentService"
 import AuthContext from "../../contexts/authContext";
 
-const reducer = (state, action) => {
-
-    switch (action?.type) {
-        case 'GET_ALL_GAMES':            
-            return [...action.payload];
-        case 'ADD_COMMENT':
-            return [...state, action.payload];
-        default:
-            return state;
-    }
-}
+import reducer from "./commentReducer";
 
 
 export default function GamesDetails () {
 
-    const {email} = useContext(AuthContext);
+    const {email, userId} = useContext(AuthContext);
 
     const [game, setGame] = useState({});
-    // const [comments, setComments] = useState([]);
+
     const [ comments, dispatch] = useReducer(reducer, []);
     const { gameId } =useParams();
 
@@ -53,7 +43,7 @@ export default function GamesDetails () {
 
           newComment.owner = { email };
 
-        //   setComments(state => [...state,{...newComment, author: {email}}]);
+
         dispatch({
             type: 'ADD_COMMENT',
             payload: newComment,
@@ -61,6 +51,7 @@ export default function GamesDetails () {
      
     }
 
+    
     return (
         <section id="game-details">
             <h1>Game Details</h1>
@@ -92,10 +83,14 @@ export default function GamesDetails () {
                 </div>
 
                 {/* <!-- Edit/Delete buttons ( Only htmlFor creator of this game )  --> */}
-                {/* <div className="buttons">
-                    <a href="#" className="button">Edit</a>
-                    <a href="#" className="button">Delete</a>
-                </div> */}
+                { userId === game._ownerId &&                     
+                    <div className="buttons">
+                        <a href="#" className="button">Edit</a>
+                        <a href="#" className="button">Delete</a>
+                    </div> 
+                }
+                    
+                    
             </div>
 
             {/* <!-- Bonus --> */}
