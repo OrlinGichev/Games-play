@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom"
 
 import * as gameService from "../../services/gameServices"
@@ -66,13 +66,10 @@ export default function GamesDetails () {
     }
 
 
-    // Temp solution //
-    const initialValues = useMemo(() => ({
-        coment: ''
-    }),[]);
-
     // eslint-disable-next-line no-unused-vars
-    const { values, onChange, onSubmit } = useForm(addCommentHandler, initialValues);
+    const { values, onChange, onSubmit } = useForm(addCommentHandler, {
+        coment: '',
+    });
 
     
     return (
