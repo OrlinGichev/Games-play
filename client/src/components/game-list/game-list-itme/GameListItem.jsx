@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom"
 
 export default function GameListItem({
+    // eslint-disable-next-line react/prop-types
     _id,
     title,
     category,
